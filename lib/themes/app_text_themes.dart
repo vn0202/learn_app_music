@@ -7,9 +7,11 @@ class AppTextTheme {
     bodyMedium: TextStyle(color: AppColors.textSecondary, fontSize: 14),
     titleLarge: TextStyle(
       color: AppColors.textPrimary,
-      fontSize: 20,
+      fontSize: 24,
       fontWeight: FontWeight.bold,
     ),
+
     titleMedium: TextStyle(color: AppColors.textPrimary, fontSize: 18),
+    titleSmall: TextStyle(color: AppColors.textSecondary, fontSize: 14),
   );
 }
