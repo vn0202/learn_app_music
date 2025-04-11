@@ -1,20 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:music_app/enums/song_item_layout.dart';
+import 'package:music_app/models/song.dart';
 import 'package:music_app/themes/app_colors.dart';
 import 'package:music_app/themes/app_text_themes.dart';
 
 class SongItem extends StatelessWidget {
-  final String title;
-  final String subtitle;
-  final String imagePath;
+  final Song song;
   final SongItemLayout layout;
   final VoidCallback? onTap;
   final Widget? trailing;
   const SongItem({
     super.key,
-    required this.title,
-    required this.subtitle,
-    required this.imagePath,
+    required this.song,
     this.layout = SongItemLayout.vertical,
     this.onTap,
     this.trailing,
@@ -58,7 +55,7 @@ class SongItem extends StatelessWidget {
                 child: AspectRatio(
                   aspectRatio: 1,
                   child: Image.network(
-                    imagePath,
+                    song.imagePath,
                     height: 160,
                     fit: BoxFit.fitWidth,
                   ),
@@ -70,20 +67,26 @@ class SongItem extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 2,
-                      title,
-                      style: AppTextTheme.lightTextTheme.titleMedium!.copyWith(
-                        fontWeight: FontWeight.bold,
+                    SizedBox(
+                      height: 40,
+                      child: Text(
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 2,
+
+                        song.name,
+                        style: AppTextTheme.lightTextTheme.titleMedium!
+                            .copyWith(fontWeight: FontWeight.bold),
                       ),
                     ),
                     SizedBox(height: 8),
-                    Text(
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 2,
-                      subtitle,
-                      style: AppTextTheme.lightTextTheme.titleSmall,
+                    SizedBox(
+                      height: 30,
+                      child: Text(
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 2,
+                        song.singer,
+                        style: AppTextTheme.lightTextTheme.titleSmall,
+                      ),
                     ),
                   ],
                 ),
@@ -121,7 +124,7 @@ class SongItem extends StatelessWidget {
                 child: AspectRatio(
                   aspectRatio: 9 / 6,
                   child: Image.network(
-                    imagePath,
+                    song.imagePath,
                     height: 160,
                     fit: BoxFit.fitWidth,
                   ),
@@ -136,7 +139,7 @@ class SongItem extends StatelessWidget {
                     Text(
                       overflow: TextOverflow.ellipsis,
                       maxLines: 2,
-                      title,
+                      song.name,
                       style: AppTextTheme.lightTextTheme.titleMedium!.copyWith(
                         fontWeight: FontWeight.bold,
                       ),
@@ -145,7 +148,7 @@ class SongItem extends StatelessWidget {
                     Text(
                       overflow: TextOverflow.ellipsis,
                       maxLines: 2,
-                      subtitle,
+                      song.singer,
                       style: AppTextTheme.lightTextTheme.titleSmall,
                     ),
                   ],
@@ -178,7 +181,7 @@ class SongItem extends StatelessWidget {
               ClipRRect(
                 borderRadius: BorderRadius.circular(6),
                 child: Image.network(
-                  imagePath,
+                  song.imagePath,
                   width: 64,
                   height: 64,
                   fit: BoxFit.cover,
@@ -191,7 +194,7 @@ class SongItem extends StatelessWidget {
                   Text(
                     overflow: TextOverflow.ellipsis,
                     maxLines: 2,
-                    title,
+                    song.name,
                     style: AppTextTheme.lightTextTheme.titleMedium!.copyWith(
                       fontWeight: FontWeight.bold,
                     ),
@@ -200,7 +203,7 @@ class SongItem extends StatelessWidget {
                   Text(
                     overflow: TextOverflow.ellipsis,
                     maxLines: 2,
-                    subtitle,
+                    song.singer,
                     style: AppTextTheme.lightTextTheme.titleSmall,
                   ),
                 ],

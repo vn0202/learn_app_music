@@ -1,30 +1,48 @@
 import 'package:flutter/material.dart';
+import 'package:music_app/models/genre.dart';
 
-class GenreCard extends StatelessWidget {
-  final String title;
-  final String imagePath;
+class GenreCard extends StatefulWidget {
+  final Genre genre;
   final VoidCallback? action;
-  const GenreCard({
-    super.key,
-    required this.title,
-    required this.imagePath,
-    required this.action,
-  });
+  const GenreCard({super.key, required this.action, required this.genre});
+
+  @override
+  State<GenreCard> createState() => _GenreCardState();
+}
+
+class _GenreCardState extends State<GenreCard> {
+  double _scale = 1.0;
+  void _onTapDown(TapDownDetails detail) {
+    setState(() {
+      _scale = 2;
+    });
+  }
+
+  void _onTapUp(TapUpDetails details) {
+    setState(() {
+      _scale = 1.0;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: action,
+      onTapDown: _onTapDown,
+      onTapUp: _onTapUp,
       child: ClipRRect(
         borderRadius: BorderRadius.circular(6),
         child: Stack(
           alignment: Alignment.center,
           children: [
-            Image.asset(
-              imagePath,
-              width: double.infinity,
-              height: double.infinity,
-              fit: BoxFit.cover,
+            AnimatedScale(
+              scale: _scale,
+              duration: Duration(microseconds: 1000),
+              child: Image.network(
+                widget.genre.thumb,
+                width: double.infinity,
+                height: double.infinity,
+                fit: BoxFit.cover,
+              ),
             ),
             Container(
               height: double.infinity,
@@ -32,7 +50,7 @@ class GenreCard extends StatelessWidget {
               decoration: BoxDecoration(color: Colors.black45),
             ),
             Text(
-              title,
+              widget.genre.name,
               style: TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.bold,

@@ -24,30 +24,18 @@ class HomePage extends StatelessWidget {
               MyBanner(),
               SizedBox(height: 24),
               ListGenre(),
+
               ListGenreChip(),
-              ListSongsVertical(),
-              ListSongs(),
-              ListSongsVertical(),
+              ListSongsVertical(title: "Newest Songs"),
+              ListSongs(title: "Favorite Songs"),
+
+              ListSongsVertical(title: "Top Viewed"),
 
               // ListSongs(),
             ],
           ),
         ),
       ),
-    );
-  }
-}
-
-class NewestSongs extends StatelessWidget {
-  const NewestSongs({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return SongItem(
-      title: "As long as you love me",
-      subtitle: "Backstreet Boy",
-      imagePath: "https://picsum.photos/200/300",
-      layout: SongItemLayout.verticalLarger,
     );
   }
 }
