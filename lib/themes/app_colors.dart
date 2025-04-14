@@ -19,4 +19,5 @@ class AppColors {
 
   static const Color error = Colors.red;
   static const Color onError = Colors.white;
+  static const Color bgLyrics = Color(0xFF131F24);
 }

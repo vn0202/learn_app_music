@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:music_app/components/song/item.dart';
 import 'package:music_app/enums/song_item_layout.dart';
 import 'package:music_app/models/song.dart';
+import 'package:music_app/routes/route_names.dart';
 import 'package:music_app/services/song_services.dart';
 import 'package:music_app/themes/app_colors.dart';
 import 'package:music_app/themes/app_text_themes.dart';
@@ -148,6 +149,12 @@ class _ListSongsVerticalState extends State<ListSongsVertical> {
                           child: SongItem(
                             song: song,
                             layout: SongItemLayout.horizontal,
+                            onTap: () {
+                              Navigator.pushNamed(
+                                context,
+                                RouteNames.songDetail,
+                              );
+                            },
                           ),
                         );
                       }).toList();

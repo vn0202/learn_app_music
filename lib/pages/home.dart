@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:music_app/components/song/item.dart';
 import 'package:music_app/components/song/list_songs.dart';
 import 'package:music_app/components/song/list_songs_vertical.dart';
-import 'package:music_app/enums/song_item_layout.dart';
 import 'package:music_app/pages/home/list_genre.dart';
 import 'package:music_app/pages/home/list_genre_chip.dart';
 import '../widgets/inc/appbar.dart';
