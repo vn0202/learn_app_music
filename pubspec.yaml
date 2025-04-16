@@ -39,6 +39,7 @@ dependencies:
   video_player: ^2.9.5
   youtube_player_flutter: ^9.1.1
   youtube_player_iframe: ^5.2.1
+  flutter_tts: ^4.2.2
 
 dev_dependencies:
   flutter_test:

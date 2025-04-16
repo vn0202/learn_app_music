@@ -20,4 +20,11 @@ class AppColors {
   static const Color error = Colors.red;
   static const Color onError = Colors.white;
   static const Color bgLyrics = Color(0xFF131F24);
+  static const Color borderLyric = Color(0xFF39464F);
+  static const Color cefrLevelA1 = Color(0xFF37c597);
+  static const Color cefrLevelA2 = Color(0xFF268969);
+  static const Color cefrLevelB1 = Color(0xFFffb900);
+  static const Color cefrLevelB2 = Color(0xFFf2994a);
+  static const Color cefrLevelC1 = Color(0xFFed4f55);
+  static const Color cefrLevelC2 = Color(0xFFbe3338);
 }

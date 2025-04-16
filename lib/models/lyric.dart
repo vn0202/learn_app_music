@@ -11,6 +11,7 @@ class Lyric {
     required this.translated,
   });
 
+  int get timeInSeconds => (timeMs / 1000).round();
   factory Lyric.fromJson(Map<String, dynamic> json) {
     return Lyric(
       timeMs: json['timeMs'] as int,

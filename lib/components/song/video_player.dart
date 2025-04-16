@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:music_app/components/song/lyrics_section.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 void main() => runApp(const VideoPlayerApp());
@@ -67,7 +66,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
             return player;
           },
         ),
-        LyricsSection(),
+        // LyricsSection(_c),
       ],
     );
   }
