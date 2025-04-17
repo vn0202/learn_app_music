@@ -1,4 +1,7 @@
 class RouteNames {
   static const String home = "/";
   static const String songDetail = "/song-detail";
+  static const String explore = "/explore";
+  static const String add = "/add";
+  static const String user = "/user";
 }

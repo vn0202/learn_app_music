@@ -3,13 +3,17 @@ import 'package:music_app/components/buttons/game_button.dart';
 import 'package:music_app/components/report.dart';
 import 'package:music_app/components/song/lyrics_player_section.dart';
 import 'package:music_app/components/user_like_reaction.dart';
+import 'package:music_app/models/song.dart';
 import 'package:music_app/models/vocabulary/vocabularies_section.dart';
 import 'package:music_app/themes/app_colors.dart';
 import 'package:music_app/themes/app_text_themes.dart';
+import 'package:music_app/widgets/inc/footer.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class SongDetailPage extends StatefulWidget {
-  const SongDetailPage({super.key});
+  final Song song;
+  const SongDetailPage({super.key, required this.song});
 
   final String videoId = "kPa7bsKwL-c";
 
@@ -19,7 +23,39 @@ class SongDetailPage extends StatefulWidget {
 
 class _SongDetailPageState extends State<SongDetailPage> {
   late YoutubePlayerController _controller;
-  String translatedLanguage = "en";
+  late Song song = widget.song;
+  String _selectedLanguage = "ko";
+
+  Future<void> _loadSelectedLanguage() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _selectedLanguage = prefs.getString("user_selected_language") ?? "ko";
+    });
+  }
+
+  Future<void> _saveSelectedLanguage(String language) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString("user_selected_language", language);
+  }
+
+  int? currentLyricIndex;
+  @override
+  void initState() {
+    _loadSelectedLanguage();
+    _controller = YoutubePlayerController(
+      initialVideoId: widget.videoId,
+      flags: const YoutubePlayerFlags(autoPlay: false, mute: false),
+    );
+    currentLyricIndex = 0;
+
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
   final List<Map<String, String>> translatedLanguages = [
     {"language_code": "", "label": "Off", 'flag': ''},
 
@@ -45,26 +81,12 @@ class _SongDetailPageState extends State<SongDetailPage> {
     },
   ];
   // ignore: prefer_typing_uninitialized_variables
-  var currentLyricIndex;
-  @override
-  void initState() {
-    _controller = YoutubePlayerController(
-      initialVideoId: widget.videoId,
-      flags: const YoutubePlayerFlags(autoPlay: false, mute: false),
-    );
-    currentLyricIndex = 0;
-
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      bottomNavigationBar: Footer(),
+
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -90,6 +112,7 @@ class _SongDetailPageState extends State<SongDetailPage> {
                         children: [
                           LyricsPlayerSection(
                             videoPlayerController: _controller,
+                            selectedLanguage: _selectedLanguage,
                           ),
                         ],
                       ),
@@ -111,7 +134,7 @@ class _SongDetailPageState extends State<SongDetailPage> {
                       Container(
                         decoration: BoxDecoration(),
                         child: DropdownButton(
-                          value: translatedLanguage,
+                          value: _selectedLanguage,
                           underline: Container(),
                           items:
                               translatedLanguages.map((lang) {
@@ -135,7 +158,8 @@ class _SongDetailPageState extends State<SongDetailPage> {
 
                           onChanged: (value) {
                             setState(() {
-                              translatedLanguage = value!;
+                              _selectedLanguage = value!;
+                              _saveSelectedLanguage(value);
                             });
                           },
                         ),
@@ -158,7 +182,7 @@ class _SongDetailPageState extends State<SongDetailPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "Nothing gonna change my love for you",
+                    song.name,
                     style: AppTextTheme.lightTextTheme.titleLarge!.copyWith(
                       color: AppColors.textPrimary,
                     ),
@@ -167,7 +191,7 @@ class _SongDetailPageState extends State<SongDetailPage> {
                   Row(
                     children: [
                       SizedBox(width: 100, child: Text("Singer")),
-                      Text("Michael Learns to Rock"),
+                      Text(song.singer),
                     ],
                   ),
                   SizedBox(height: 6),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:music_app/pages/home.dart';
 import 'package:music_app/pages/song/song_detail_page.dart';
 import 'package:music_app/routes/route_names.dart';
 import 'package:music_app/themes/app_theme.dart';
@@ -16,11 +17,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Music Learn',
-      initialRoute: RouteNames.songDetail,
+      initialRoute: RouteNames.home,
       onGenerateRoute: RouteConfig.generateRoute,
       theme: lightTheme,
       themeMode: ThemeMode.system,
-      home: SongDetailPage(), // tự động chuyển theo hệ thống
     );
   }
 }

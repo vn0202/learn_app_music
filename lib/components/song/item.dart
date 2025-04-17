@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:music_app/enums/song_item_layout.dart';
 import 'package:music_app/models/song.dart';
+import 'package:music_app/routes/route_names.dart';
 import 'package:music_app/themes/app_colors.dart';
 import 'package:music_app/themes/app_text_themes.dart';
 
@@ -21,17 +22,23 @@ class SongItem extends StatelessWidget {
   Widget build(BuildContext context) {
     switch (layout) {
       case SongItemLayout.vertical:
-        return _buildVerticalLayout();
+        return _buildVerticalLayout(context);
       case SongItemLayout.verticalLarger:
-        return _buildVerticalLargerLayout();
+        return _buildVerticalLargerLayout(context);
       case SongItemLayout.horizontal:
-        return _buildHorizontalLayout();
+        return _buildHorizontalLayout(context);
     }
   }
 
-  Widget _buildVerticalLayout() {
+  Widget _buildVerticalLayout(BuildContext context) {
     return GestureDetector(
-      onTap: onTap,
+      onTap:
+          onTap ??
+          () => Navigator.pushNamed(
+            context,
+            RouteNames.songDetail,
+            arguments: {'song': song},
+          ),
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12),
@@ -98,9 +105,15 @@ class SongItem extends StatelessWidget {
     );
   }
 
-  Widget _buildVerticalLargerLayout() {
+  Widget _buildVerticalLargerLayout(BuildContext context) {
     return GestureDetector(
-      onTap: onTap,
+      onTap:
+          onTap ??
+          () => Navigator.pushNamed(
+            context,
+            RouteNames.songDetail,
+            arguments: {'song': song},
+          ),
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12),
@@ -161,9 +174,15 @@ class SongItem extends StatelessWidget {
     );
   }
 
-  Widget _buildHorizontalLayout() {
+  Widget _buildHorizontalLayout(BuildContext context) {
     return GestureDetector(
-      onTap: () => {},
+      onTap:
+          onTap ??
+          () => Navigator.pushNamed(
+            context,
+            RouteNames.songDetail,
+            arguments: {"song": song},
+          ),
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12),

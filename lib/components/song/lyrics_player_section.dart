@@ -7,7 +7,12 @@ import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class LyricsPlayerSection extends StatefulWidget {
   final YoutubePlayerController? videoPlayerController;
-  const LyricsPlayerSection({super.key, required this.videoPlayerController});
+  final String? selectedLanguage;
+  const LyricsPlayerSection({
+    super.key,
+    required this.videoPlayerController,
+    this.selectedLanguage,
+  });
 
   @override
   State<LyricsPlayerSection> createState() => _LyricsPlayerSectionState();
@@ -30,7 +35,7 @@ class _LyricsPlayerSectionState extends State<LyricsPlayerSection> {
   }
 
   Future<void> _initFutureState() async {
-    lyricsFuture = await SongServices.getLyrics(10);
+    lyricsFuture = await SongServices.getLyricsV2(10);
   }
 
   @override
@@ -141,7 +146,12 @@ class _LyricsPlayerSectionState extends State<LyricsPlayerSection> {
                                     ),
                                     SizedBox(height: 6),
                                     Text(
-                                      lyricsFuture[index].translated,
+                                      lyricsFuture[index].translations != null
+                                          ? lyricsFuture[index]
+                                                  .translations![widget
+                                                  .selectedLanguage] ??
+                                              lyricsFuture[index].content
+                                          : lyricsFuture[index].content,
                                       style: AppTextTheme
                                           .lightTextTheme
                                           .titleSmall!
