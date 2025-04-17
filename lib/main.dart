@@ -1,11 +1,27 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
-import 'package:music_app/pages/home.dart';
-import 'package:music_app/pages/song/song_detail_page.dart';
+import 'package:hive_flutter/adapters.dart';
+import 'package:music_app/models/lyric.dart';
+import 'package:music_app/models/song.dart';
+import 'package:music_app/models/translation.dart';
 import 'package:music_app/routes/route_names.dart';
 import 'package:music_app/themes/app_theme.dart';
 import 'package:music_app/routes/route_config.dart';
+import 'package:path_provider/path_provider.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  var dir = await getApplicationDocumentsDirectory();
+  Hive
+    ..init(dir.path)
+    ..registerAdapter(SongAdapter())
+    ..registerAdapter(TranslationAdapter())
+    ..registerAdapter(LyricAdapter());
+  await Hive.openBox("songBox");
+  // var box = Hive.box("songBox");
+  // await box.clear();
+
   runApp(const MyApp());
 }
 

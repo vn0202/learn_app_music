@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:music_app/models/lyric.dart';
+import 'package:music_app/models/song.dart';
 import 'package:music_app/services/song_services.dart';
 import 'package:music_app/themes/app_colors.dart';
 import 'package:music_app/themes/app_text_themes.dart';
@@ -7,10 +8,12 @@ import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class LyricsPlayerSection extends StatefulWidget {
   final YoutubePlayerController? videoPlayerController;
+  final Song song;
   final String? selectedLanguage;
   const LyricsPlayerSection({
     super.key,
     required this.videoPlayerController,
+    required this.song,
     this.selectedLanguage,
   });
 
@@ -19,12 +22,40 @@ class LyricsPlayerSection extends StatefulWidget {
 }
 
 class _LyricsPlayerSectionState extends State<LyricsPlayerSection> {
-  late List<Lyric> lyricsFuture;
+  List<Lyric>? lyricsFuture;
+  List<Lyric>? lyricsTranslatedFuture;
   late Future<void> initializeVideoPlayerFuture;
   late ScrollController _scrollController;
 
   YoutubePlayerController? _controller;
   int? _currentLyricIndex;
+
+  @override
+  void didUpdateWidget(covariant LyricsPlayerSection oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.selectedLanguage != oldWidget.selectedLanguage) {
+      print("Helo 123");
+      print(widget.selectedLanguage);
+      _updateTranslatedLyric(widget.selectedLanguage);
+    }
+  }
+
+  Future<void> _updateTranslatedLyric(String? language) async {
+    if (language != null) {
+      final translated = await SongServices.getTranslated(
+        widget.song,
+        language!,
+      );
+      setState(() {
+        lyricsTranslatedFuture = translated;
+      });
+    } else {
+      setState(() {
+        lyricsTranslatedFuture = [];
+      });
+    }
+  }
+
   @override
   void initState() {
     initializeVideoPlayerFuture = _initFutureState();
@@ -35,7 +66,19 @@ class _LyricsPlayerSectionState extends State<LyricsPlayerSection> {
   }
 
   Future<void> _initFutureState() async {
-    lyricsFuture = await SongServices.getLyricsV2(10);
+    try {
+      lyricsFuture = await SongServices.getLyrics(widget.song);
+      if (widget.selectedLanguage != null) {
+        lyricsTranslatedFuture = await SongServices.getTranslated(
+          widget.song,
+          widget.selectedLanguage!,
+        );
+      } else {
+        lyricsTranslatedFuture = [];
+      }
+    } catch (e) {
+      lyricsFuture = [];
+    }
   }
 
   @override
@@ -50,8 +93,8 @@ class _LyricsPlayerSectionState extends State<LyricsPlayerSection> {
         _currentLyricIndex == null ? 0 : _currentLyricIndex!;
     if (_controller!.value.isPlaying) {
       if (_controller!.value.position.inSeconds >
-              lyricsFuture[currentLyricIndex].timeInSeconds &&
-          currentLyricIndex < lyricsFuture.length) {
+              lyricsFuture![currentLyricIndex].timeInSeconds &&
+          currentLyricIndex < lyricsFuture!.length) {
         setState(() {
           if (_currentLyricIndex == null) {
             _currentLyricIndex = 0;
@@ -80,12 +123,12 @@ class _LyricsPlayerSectionState extends State<LyricsPlayerSection> {
             child: SizedBox(
               child: ListView.builder(
                 padding: EdgeInsets.all(0),
-                itemCount: lyricsFuture.length,
+                itemCount: lyricsFuture?.length,
                 controller: _scrollController,
 
                 itemBuilder:
                     (context, index) =>
-                        lyricsFuture.isNotEmpty
+                        lyricsFuture!.isNotEmpty
                             ? GestureDetector(
                               onTap:
                                   () => {
@@ -95,7 +138,7 @@ class _LyricsPlayerSectionState extends State<LyricsPlayerSection> {
                                     _controller!.seekTo(
                                       Duration(
                                         milliseconds:
-                                            lyricsFuture[index].timeMs,
+                                            lyricsFuture![index].timeMs,
                                       ),
                                     ),
                                     _scrollController.animateTo(
@@ -131,12 +174,13 @@ class _LyricsPlayerSectionState extends State<LyricsPlayerSection> {
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
                                     Text(
-                                      lyricsFuture[index].content,
+                                      lyricsFuture![index].content,
                                       style: AppTextTheme
                                           .lightTextTheme
                                           .titleSmall!
                                           .copyWith(
                                             fontWeight: FontWeight.bold,
+
                                             color:
                                                 _currentLyricIndex == index
                                                     ? AppColors.primary
@@ -145,13 +189,17 @@ class _LyricsPlayerSectionState extends State<LyricsPlayerSection> {
                                           ),
                                     ),
                                     SizedBox(height: 6),
+
                                     Text(
-                                      lyricsFuture[index].translations != null
-                                          ? lyricsFuture[index]
-                                                  .translations![widget
-                                                  .selectedLanguage] ??
-                                              lyricsFuture[index].content
-                                          : lyricsFuture[index].content,
+                                      lyricsTranslatedFuture?.elementAtOrNull(
+                                                index,
+                                              ) !=
+                                              null
+                                          ? lyricsTranslatedFuture
+                                                  ?.elementAtOrNull(index)!
+                                                  .content ??
+                                              ""
+                                          : "",
                                       style: AppTextTheme
                                           .lightTextTheme
                                           .titleSmall!
@@ -160,7 +208,7 @@ class _LyricsPlayerSectionState extends State<LyricsPlayerSection> {
                                                 _currentLyricIndex == index
                                                     ? AppColors.primary
                                                     : Colors.white,
-                                            fontSize: 12,
+                                            fontSize: 16,
                                           ),
                                     ),
                                     SizedBox(height: 6),

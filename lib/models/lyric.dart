@@ -1,14 +1,20 @@
-class Lyric {
+import 'package:hive/hive.dart';
+import 'package:music_app/core/hive/hive_ids.dart';
+part 'lyric.g.dart';
+
+@HiveType(typeId: HiveIds.lyric)
+class Lyric extends HiveObject {
+  @HiveField(0)
   final int timeMs;
+  @HiveField(1)
   final int durationMs;
+  @HiveField(2)
   final String content;
-  final Map<String, String>? translations;
 
   Lyric({
     required this.timeMs,
     required this.durationMs,
     required this.content,
-    this.translations,
   });
 
   int get timeInSeconds => (timeMs / 1000).round();
@@ -17,7 +23,6 @@ class Lyric {
       timeMs: json['timeMs'] as int,
       durationMs: json['durationMs'] as int,
       content: json['content'] as String,
-      translations: Map<String, String>.from(json['translations']),
     );
   }
   @override

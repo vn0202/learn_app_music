@@ -24,7 +24,7 @@ class SongDetailPage extends StatefulWidget {
 class _SongDetailPageState extends State<SongDetailPage> {
   late YoutubePlayerController _controller;
   late Song song = widget.song;
-  String _selectedLanguage = "ko";
+  String? _selectedLanguage;
 
   Future<void> _loadSelectedLanguage() async {
     final prefs = await SharedPreferences.getInstance();
@@ -33,9 +33,13 @@ class _SongDetailPageState extends State<SongDetailPage> {
     });
   }
 
-  Future<void> _saveSelectedLanguage(String language) async {
+  Future<void> _saveSelectedLanguage(String? language) async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setString("user_selected_language", language);
+    if (language != null) {
+      await prefs.setString("user_selected_language", language);
+    } else {
+      await prefs.remove("user_selected_language");
+    }
   }
 
   int? currentLyricIndex;
@@ -56,8 +60,8 @@ class _SongDetailPageState extends State<SongDetailPage> {
     super.dispose();
   }
 
-  final List<Map<String, String>> translatedLanguages = [
-    {"language_code": "", "label": "Off", 'flag': ''},
+  final List<Map<String, String?>> translatedLanguages = [
+    {"language_code": null, "label": "Off", 'flag': ''},
 
     {
       "language_code": "en",
@@ -113,6 +117,7 @@ class _SongDetailPageState extends State<SongDetailPage> {
                           LyricsPlayerSection(
                             videoPlayerController: _controller,
                             selectedLanguage: _selectedLanguage,
+                            song: song,
                           ),
                         ],
                       ),
@@ -158,9 +163,9 @@ class _SongDetailPageState extends State<SongDetailPage> {
 
                           onChanged: (value) {
                             setState(() {
-                              _selectedLanguage = value!;
-                              _saveSelectedLanguage(value);
+                              _selectedLanguage = value;
                             });
+                            _saveSelectedLanguage(value);
                           },
                         ),
                       ),

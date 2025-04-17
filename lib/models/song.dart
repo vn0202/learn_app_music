@@ -1,10 +1,25 @@
-class Song {
+import 'package:hive/hive.dart';
+import 'package:music_app/core/hive/hive_ids.dart';
+import 'package:music_app/models/lyric.dart';
+import 'package:music_app/models/translation.dart';
+part 'song.g.dart';
+
+@HiveType(typeId: HiveIds.song)
+class Song extends HiveObject {
+  @HiveField(0)
   final String id;
+  @HiveField(1)
   final String name;
+  @HiveField(2)
   final String imagePath;
+  @HiveField(3)
   final String singer;
+  @HiveField(4)
   List? availableTranslations;
-  List<Map<String, dynamic>>? tranlations = [];
+  @HiveField(5)
+  Map<String, Translation>? tranlations;
+  @HiveField(6)
+  List<Lyric>? lyrics;
   Song({
     required this.name,
     required this.imagePath,
@@ -12,15 +27,28 @@ class Song {
     required this.id,
     this.tranlations,
     this.availableTranslations,
+    this.lyrics,
   });
 
   factory Song.fromJson(Map<String, dynamic> json) {
+    Map<String, Translation> parsedTranslations = {};
+    if (json['tranlations'] != null) {
+      (json['tranlations'] as Map<String, dynamic>).forEach((key, value) {
+        parsedTranslations[key] = Translation.fromJson(value);
+      });
+    }
+    List<Lyric> parsedLyrics =
+        (json['lyrics'] as List<dynamic>?)
+            ?.map((item) => Lyric.fromJson(item as Map<String, dynamic>))
+            .toList() ??
+        [];
     return Song(
       id: json['id'].toString(),
       name: json['name'] ?? 'N/A',
       imagePath: json['imagePath'] ?? '',
       singer: json['singer'] ?? "N/A",
-      tranlations: json['tranlations'] ?? [],
+      tranlations: parsedTranslations,
+      lyrics: parsedLyrics,
       availableTranslations: json['availableTranslations'] ?? [],
     );
   }
