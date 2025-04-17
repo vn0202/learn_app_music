@@ -17,7 +17,7 @@ class Lyric {
       timeMs: json['timeMs'] as int,
       durationMs: json['durationMs'] as int,
       content: json['content'] as String,
-      translations: Map<String, String>.from(json['translations']) ?? {},
+      translations: Map<String, String>.from(json['translations']),
     );
   }
   @override
