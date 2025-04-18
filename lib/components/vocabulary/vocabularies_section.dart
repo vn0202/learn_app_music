@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:music_app/models/vocabulary.dart';
-import 'package:music_app/models/vocabulary/vocabulary_item.dart';
+import 'package:music_app/components/vocabulary/vocabulary_item.dart';
 import 'package:music_app/themes/app_text_themes.dart';
 
 class VocabulariesSection extends StatelessWidget {

@@ -47,7 +47,6 @@ class SongServices {
 
       return fakeJson.map((item) => Song.fromJson(item)).toList();
     } catch (e) {
-      print(e);
       return [];
     }
   }

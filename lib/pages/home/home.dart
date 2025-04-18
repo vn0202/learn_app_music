@@ -4,8 +4,8 @@ import 'package:music_app/components/song/list_songs_vertical.dart';
 import 'package:music_app/pages/home/list_genre.dart';
 import 'package:music_app/pages/home/list_genre_chip.dart';
 import 'package:music_app/widgets/inc/footer.dart';
-import '../widgets/inc/appbar.dart';
-import '../components/banner.dart';
+import '../../widgets/inc/appbar.dart';
+import '../../components/banner.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});

@@ -1,14 +1,14 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:music_app/models/lyric.dart';
 import 'package:music_app/models/song.dart';
 import 'package:music_app/models/translation.dart';
+import 'package:music_app/providers/user_preferences.dart';
 import 'package:music_app/routes/route_names.dart';
 import 'package:music_app/themes/app_theme.dart';
 import 'package:music_app/routes/route_config.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -21,8 +21,14 @@ void main() async {
   await Hive.openBox("songBox");
   // var box = Hive.box("songBox");
   // await box.clear();
+  final userPreferenceProvider = UserPreferencesProvider();
 
-  runApp(const MyApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (_) => userPreferenceProvider,
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {

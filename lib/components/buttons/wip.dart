@@ -49,6 +49,64 @@ Future<void> initializeHive() async {
 }
 
 Future<void> saveSong(Song song) async {
+  final test = [
+    {
+      "vi": {
+        "flag": "assets/images/flags/vietname.png",
+        "name": "Vietnamese",
+        'value': "vi",
+      },
+    },
+    {
+      "en": {
+        "flag": "assets/images/flags/american.png",
+        "name": "English",
+        'value': "en",
+      },
+    },
+    {
+      "ko": {
+        "flag": "assets/images/flags/south_korea.webp",
+        "name": "Korean",
+        'value': "ko",
+      },
+    },
+    {
+      "ja": {
+        "flag": "assets/images/flags/japan.png",
+        "name": "Japanese",
+        'value': "ja",
+      },
+    },
+    {
+      "zh": {
+        "flag": "assets/images/flags/china.png",
+        "name": "Chinese",
+        'value': "zh",
+      },
+    },
+    {
+      "es": {
+        "flag": "assets/images/flags/spain.png",
+        "name": "Spanish",
+        'value': "es",
+      },
+    },
+    {
+      "pt": {
+        "flag": "assets/images/flags/portugal.png",
+        "name": "Portuguese",
+        'value': "pt",
+      },
+    },
+    {
+      "fr": {
+        "flag": "assets/images/flags/france.png",
+        "name": "French",
+        'value': "fr",
+      },
+    },
+  ];
   final songBox = Hive.box<Map>('songBox');
   await songBox.add(song.toMap());
 }

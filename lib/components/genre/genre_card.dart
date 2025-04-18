@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:music_app/models/genre.dart';
+import 'package:music_app/routes/route_names.dart';
 
 class GenreCard extends StatefulWidget {
   final Genre genre;
@@ -27,6 +28,12 @@ class _GenreCardState extends State<GenreCard> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+      onTap:
+          () => Navigator.pushNamed(
+            context,
+            RouteNames.genre,
+            arguments: {"genre": widget.genre},
+          ),
       onTapDown: _onTapDown,
       onTapUp: _onTapUp,
       child: ClipRRect(

@@ -4,7 +4,7 @@ import 'package:music_app/components/report.dart';
 import 'package:music_app/components/song/lyrics_player_section.dart';
 import 'package:music_app/components/user_like_reaction.dart';
 import 'package:music_app/models/song.dart';
-import 'package:music_app/models/vocabulary/vocabularies_section.dart';
+import 'package:music_app/components/vocabulary/vocabularies_section.dart';
 import 'package:music_app/themes/app_colors.dart';
 import 'package:music_app/themes/app_text_themes.dart';
 import 'package:music_app/widgets/inc/footer.dart';

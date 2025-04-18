@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:music_app/pages/modals/switch_langugae.dart';
+import 'package:music_app/providers/user_preferences.dart';
 import 'package:music_app/themes/app_colors.dart';
 import 'package:music_app/themes/app_text_themes.dart';
+import 'package:provider/provider.dart';
 
 class Appbar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
@@ -28,19 +31,49 @@ class LanguageSwitcher extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        CircleAvatar(
-          radius: 12,
-          backgroundImage: AssetImage("assets/images/flags/vietname.png"),
-        ),
-        SizedBox(width: 8),
-        Text(
-          "Tieng Viet",
-          style: AppTextTheme.lightTextTheme.bodyLarge!.copyWith(),
-        ),
-        Icon(Icons.keyboard_arrow_down),
-      ],
+    final userPreferencesProvider = Provider.of<UserPreferencesProvider>(
+      context,
+    );
+
+    final interfaceLanguage = userPreferencesProvider.currentLanguageInfo;
+
+    return GestureDetector(
+      onTap: () {
+        Navigator.of(context).push(
+          PageRouteBuilder(
+            pageBuilder: (_, __, ___) => const SwitchLangugae(),
+            transitionsBuilder: (_, animation, __, child) {
+              const begin = Offset(-1.0, 0.0); // từ trái
+              const end = Offset.zero;
+              const curve = Curves.easeInOut;
+
+              var tween = Tween(
+                begin: begin,
+                end: end,
+              ).chain(CurveTween(curve: curve));
+              return SlideTransition(
+                position: animation.drive(tween),
+                child: child,
+              );
+            },
+            fullscreenDialog: true, // modal full screen),
+          ),
+        );
+      },
+      child: Row(
+        children: [
+          CircleAvatar(
+            radius: 12,
+            backgroundImage: AssetImage(interfaceLanguage['flag']!),
+          ),
+          SizedBox(width: 8),
+          Text(
+            interfaceLanguage['name'],
+            style: AppTextTheme.lightTextTheme.bodyLarge!.copyWith(),
+          ),
+          Icon(Icons.keyboard_arrow_down),
+        ],
+      ),
     );
   }
 }
