@@ -60,7 +60,12 @@ class SwitchLangugae extends StatelessWidget {
                       style: AppTextTheme.lightTextTheme.titleLarge,
                     ),
                   ),
-                  Icon(Icons.close, size: 32),
+                  IconButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    icon: Icon(Icons.close),
+                  ),
                 ],
               ),
               SizedBox(height: 32),
