@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:music_app/pages/modals/switch_langugae.dart';
+import 'package:music_app/pages/modals/search.dart';
 import 'package:music_app/providers/user_preferences.dart';
+import 'package:music_app/routes/route_names.dart';
 import 'package:music_app/themes/app_colors.dart';
 import 'package:music_app/themes/app_text_themes.dart';
 import 'package:provider/provider.dart';
@@ -84,7 +86,26 @@ class Search extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return IconButton(
-      onPressed: () {},
+      onPressed: () {
+        Navigator.of(context).push(
+          PageRouteBuilder(
+            pageBuilder: (_, __, ___) => SearchPage(),
+            transitionsBuilder: (_, animation, _, child) {
+              const begin = Offset(-1.0, 0.0); // từ trái
+              const end = Offset.zero;
+              const curve = Curves.easeInOut;
+              var tween = Tween(
+                begin: begin,
+                end: end,
+              ).chain(CurveTween(curve: curve));
+              return SlideTransition(
+                position: animation.drive(tween),
+                child: child,
+              );
+            },
+          ),
+        );
+      },
       icon: Icon(Icons.search, color: AppColors.textPrimary),
     );
   }

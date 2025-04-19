@@ -34,8 +34,6 @@ class _LyricsPlayerSectionState extends State<LyricsPlayerSection> {
   void didUpdateWidget(covariant LyricsPlayerSection oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.selectedLanguage != oldWidget.selectedLanguage) {
-      print("Helo 123");
-      print(widget.selectedLanguage);
       _updateTranslatedLyric(widget.selectedLanguage);
     }
   }
@@ -44,7 +42,7 @@ class _LyricsPlayerSectionState extends State<LyricsPlayerSection> {
     if (language != null) {
       final translated = await SongServices.getTranslated(
         widget.song,
-        language!,
+        language,
       );
       setState(() {
         lyricsTranslatedFuture = translated;

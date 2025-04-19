@@ -24,7 +24,14 @@ class Footer extends StatelessWidget {
             icon: Icons.explore,
             label: 'Explore',
           ),
-          _buildFooterItem(context: context, icon: Icons.add, label: 'Add'),
+          _buildFooterItem(
+            context: context,
+            icon: Icons.add,
+            label: 'Add',
+            onTap: () {
+              Navigator.pushNamed(context, RouteNames.add);
+            },
+          ),
           _buildFooterItem(context: context, icon: Icons.person, label: 'User'),
         ],
       ),

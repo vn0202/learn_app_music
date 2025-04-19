@@ -1,7 +1,9 @@
+import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:music_app/core/hive/hive_ids.dart';
 import 'package:music_app/models/lyric.dart';
 import 'package:music_app/models/translation.dart';
+import 'package:music_app/routes/route_names.dart';
 part 'song.g.dart';
 
 @HiveType(typeId: HiveIds.song)
@@ -50,6 +52,14 @@ class Song extends HiveObject {
       tranlations: parsedTranslations,
       lyrics: parsedLyrics,
       availableTranslations: json['availableTranslations'] ?? [],
+    );
+  }
+
+  void navigatorToSongDetailPage(BuildContext context) {
+    Navigator.pushNamed(
+      context,
+      RouteNames.songDetail,
+      arguments: {'song': this},
     );
   }
 }

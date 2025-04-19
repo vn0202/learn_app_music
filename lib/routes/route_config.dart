@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:music_app/models/genre.dart';
 import 'package:music_app/models/song.dart';
+import 'package:music_app/pages/add_songs/add_song.dart';
 import 'package:music_app/pages/genre/genre.dart';
 import 'package:music_app/pages/home/home.dart';
 import 'package:music_app/pages/song/song_detail_page.dart';
@@ -23,6 +24,9 @@ class RouteConfig {
         final Genre genre = args['genre'] as Genre;
 
         return MaterialPageRoute(builder: (_) => GenrePage(genre: genre));
+
+      case RouteNames.add:
+        return MaterialPageRoute(builder: (_) => AddSongPage());
 
       default:
         return MaterialPageRoute(builder: (_) => const HomePage());

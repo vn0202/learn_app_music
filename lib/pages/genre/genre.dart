@@ -67,41 +67,42 @@ class _GenrePageState extends State<GenrePage> {
     return Scaffold(
       appBar: Appbar(title: "Genre"),
       bottomNavigationBar: Footer(),
-      body: Center(
-        child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 24, vertical: 24),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                widget.genre.name,
-                style: AppTextTheme.lightTextTheme.titleLarge!.copyWith(
-                  color: AppColors.primary,
-                  fontSize: 34,
-                ),
+      body: Container(
+        padding: EdgeInsets.symmetric(horizontal: 24, vertical: 24),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              widget.genre.name,
+              style: AppTextTheme.lightTextTheme.titleLarge!.copyWith(
+                color: AppColors.primary,
+                fontSize: 34,
               ),
-              SizedBox(height: 24),
-              Expanded(
-                child: ListView.separated(
-                  controller: _controller,
-                  shrinkWrap: true,
-                  itemCount: _items.length + 1,
-                  itemBuilder: (context, index) {
-                    if (index == _items.length) {
-                      return _isLoading
-                          ? Center(child: CircularProgressIndicator())
-                          : SizedBox();
-                    }
-                    return SongItem(
+            ),
+            SizedBox(height: 24),
+            Expanded(
+              child: ListView.separated(
+                controller: _controller,
+                shrinkWrap: true,
+                itemCount: _items.length + 1,
+                itemBuilder: (context, index) {
+                  if (index == _items.length) {
+                    return _isLoading
+                        ? Center(child: CircularProgressIndicator())
+                        : SizedBox();
+                  }
+                  return SizedBox(
+                    width: 100,
+                    child: SongItem(
                       song: _items[index],
                       layout: SongItemLayout.verticalLarger,
-                    );
-                  },
-                  separatorBuilder: (context, index) => SizedBox(height: 12),
-                ),
+                    ),
+                  );
+                },
+                separatorBuilder: (context, index) => SizedBox(height: 12),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

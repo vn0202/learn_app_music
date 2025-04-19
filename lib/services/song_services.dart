@@ -51,19 +51,32 @@ class SongServices {
     }
   }
 
-  Future<Song> getSong(int songId) async {
+  Future<List<Song>> suggestionSong(String value) async {
+    final allSongs = await fetchSongs();
+
+    return allSongs.where((song) {
+      return song.name.toLowerCase().contains(value);
+    }).toList();
+  }
+
+  Future<Song?> getSong(songId) async {
     var songBox = Hive.box("songBox");
     Song? song = songBox.get("song_$songId");
     if (song != null) {
       return song;
     }
     var listSongs = await fetchSongs();
-    var songMatch = listSongs.firstWhere(
-      (song) => song.id == songId.toString(),
-      orElse: () => throw Exception("Song not found"),
-    );
-    songBox.put("song_$songId", songMatch);
-    return songMatch;
+    return listSongs.first;
+    // try {
+    //   var songMatch = listSongs.firstWhere(
+    //     (song) => song.id == songId.toString(),
+    //     orElse: () => throw Exception("Song not found"),
+    //   );
+    //   songBox.put("song_$songId", songMatch);
+    //   return songMatch;
+    // } catch (e) {
+    //   return null;
+    // }
   }
 
   static Future<List<Lyric>> getLyrics(Song _song) async {

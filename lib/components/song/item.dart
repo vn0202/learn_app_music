@@ -32,13 +32,7 @@ class SongItem extends StatelessWidget {
 
   Widget _buildVerticalLayout(BuildContext context) {
     return GestureDetector(
-      onTap:
-          onTap ??
-          () => Navigator.pushNamed(
-            context,
-            RouteNames.songDetail,
-            arguments: {'song': song},
-          ),
+      onTap: onTap ?? () => song.navigatorToSongDetailPage(context),
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12),
@@ -107,14 +101,10 @@ class SongItem extends StatelessWidget {
 
   Widget _buildVerticalLargerLayout(BuildContext context) {
     return GestureDetector(
-      onTap:
-          onTap ??
-          () => Navigator.pushNamed(
-            context,
-            RouteNames.songDetail,
-            arguments: {'song': song},
-          ),
+      onTap: onTap ?? () => song.navigatorToSongDetailPage(context),
       child: Container(
+        width: 284,
+
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12),
           border: Border(
@@ -123,10 +113,8 @@ class SongItem extends StatelessWidget {
             right: BorderSide(width: 1, color: AppColors.border),
             bottom: BorderSide(width: 2.5, color: AppColors.border),
           ),
-          color: AppColors.card,
         ),
         child: SizedBox(
-          width: 284,
           child: Column(
             children: [
               ClipRRect(
@@ -176,13 +164,7 @@ class SongItem extends StatelessWidget {
 
   Widget _buildHorizontalLayout(BuildContext context) {
     return GestureDetector(
-      onTap:
-          onTap ??
-          () => Navigator.pushNamed(
-            context,
-            RouteNames.songDetail,
-            arguments: {"song": song},
-          ),
+      onTap: onTap ?? () => song.navigatorToSongDetailPage(context),
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12),
