@@ -26,9 +26,10 @@ class _LyricsPlayerSectionState extends State<LyricsPlayerSection> {
   List<Lyric>? lyricsTranslatedFuture;
   late Future<void> initializeVideoPlayerFuture;
   late ScrollController _scrollController;
+  bool isEnd = false;
 
   YoutubePlayerController? _controller;
-  int? _currentLyricIndex;
+  int _currentLyricIndex = -1;
 
   @override
   void didUpdateWidget(covariant LyricsPlayerSection oldWidget) {
@@ -87,24 +88,41 @@ class _LyricsPlayerSectionState extends State<LyricsPlayerSection> {
   }
 
   void videoListener() {
-    var currentLyricIndex =
-        _currentLyricIndex == null ? 0 : _currentLyricIndex!;
+    final currentTimeMs = _controller!.value.position.inMilliseconds;
+    final PlayerState playerState = _controller!.value.playerState;
+    if (playerState == PlayerState.ended) {
+      isEnd = true;
+    }
+    if (playerState == PlayerState.playing && isEnd == true) {
+      setState(() {
+        _currentLyricIndex = -1;
+        isEnd = false;
+      });
+    }
+    if (currentTimeMs < lyricsFuture![0].timeMs) {
+      return;
+    }
+    if (_currentLyricIndex == -1) {
+      setState(() {
+        _currentLyricIndex = 0;
+      });
+    }
+
     if (_controller!.value.isPlaying) {
-      if (_controller!.value.position.inSeconds >
-              lyricsFuture![currentLyricIndex].timeInSeconds &&
-          currentLyricIndex < lyricsFuture!.length) {
-        setState(() {
-          if (_currentLyricIndex == null) {
-            _currentLyricIndex = 0;
-          } else {
-            _currentLyricIndex = _currentLyricIndex! + 1;
+      for (var i = _currentLyricIndex + 1; i < lyricsFuture!.length; i++) {
+        if (currentTimeMs >= lyricsFuture![i].timeMs) {
+          if (i != _currentLyricIndex) {
+            setState(() {
+              _currentLyricIndex = i;
+            });
             _scrollController.animateTo(
-              _currentLyricIndex! * 61.0,
+              _currentLyricIndex * 70.5,
               duration: const Duration(milliseconds: 200),
               curve: Curves.easeInOut,
             );
           }
-        });
+          return;
+        }
       }
     }
   }
@@ -140,7 +158,7 @@ class _LyricsPlayerSectionState extends State<LyricsPlayerSection> {
                                       ),
                                     ),
                                     _scrollController.animateTo(
-                                      _currentLyricIndex! * 61.0,
+                                      _currentLyricIndex! * 70.5,
                                       duration: const Duration(
                                         milliseconds: 200,
                                       ),

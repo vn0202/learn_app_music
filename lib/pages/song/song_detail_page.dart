@@ -15,7 +15,7 @@ class SongDetailPage extends StatefulWidget {
   final Song song;
   const SongDetailPage({super.key, required this.song});
 
-  final String videoId = "kPa7bsKwL-c";
+  final String videoId = "XAciTafsV8w";
 
   @override
   State<SongDetailPage> createState() => _SongDetailPageState();

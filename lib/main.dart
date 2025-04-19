@@ -19,8 +19,9 @@ void main() async {
     ..registerAdapter(TranslationAdapter())
     ..registerAdapter(LyricAdapter());
   await Hive.openBox("songBox");
-  // var box = Hive.box("songBox");
-  // await box.clear();
+
+  var box = Hive.box("songBox");
+  await box.clear();
   final userPreferenceProvider = UserPreferencesProvider();
 
   runApp(
