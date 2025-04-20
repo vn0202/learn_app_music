@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:music_app/models/song.dart';
+import 'package:music_app/routes/route_names.dart';
 import 'package:music_app/services/song_services.dart';
 import 'package:music_app/themes/app_colors.dart';
 import 'package:music_app/themes/app_text_themes.dart';
@@ -18,6 +19,8 @@ class _AddSongPageState extends State<AddSongPage> {
   Song? availableSong;
   final _formKey = GlobalKey<FormState>();
   late TextEditingController _controller;
+  bool isNextRequest = false;
+  bool isLoading = false;
 
   @override
   void initState() {
@@ -33,7 +36,15 @@ class _AddSongPageState extends State<AddSongPage> {
   }
 
   Future<Song?> getSong(String id) async {
-    return await SongServices().getSong(1);
+    setState(() {
+      isLoading = true;
+    });
+
+    final song = await SongServices().getSong(1);
+    setState(() {
+      isLoading = false;
+    });
+    return song;
   }
 
   @override
@@ -79,7 +90,7 @@ class _AddSongPageState extends State<AddSongPage> {
                 ),
               ),
               SizedBox(height: 12),
-              _buildFormRequest(),
+              _buildFormRequest(context),
             ],
           ),
         ),
@@ -87,7 +98,14 @@ class _AddSongPageState extends State<AddSongPage> {
     );
   }
 
-  Widget _buildFormRequest() {
+  void reset() {
+    _controller.clear();
+    setState(() {
+      availableSong = null;
+    });
+  }
+
+  Widget _buildFormRequest(BuildContext context) {
     return Form(
       key: _formKey,
       child: Column(
@@ -118,24 +136,40 @@ class _AddSongPageState extends State<AddSongPage> {
             ),
           ),
           SizedBox(height: 24),
-          if (availableSong != null) _buildAvailableSong(),
+          isLoading
+              ? CircularProgressIndicator()
+              : (availableSong != null ? _buildAvailableSong() : Container()),
+
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(
               onPressed: () async {
+                final ctx = context;
+                if (isNextRequest) {
+                  setState(() {
+                    availableSong = null;
+                  });
+                }
                 bool valid = _formKey.currentState!.validate();
                 if (valid) {
+                  if (!isNextRequest) {
+                    isNextRequest = true;
+                  }
                   final youtubeId = YoutubePlayer.convertUrlToId(
                     _controller.text.trim(),
                   );
                   Song? songTmp = await getSong(youtubeId ?? "");
+                  if (!ctx.mounted) {
+                    return;
+                  } // ⬅️ Check this before using context
+
                   setState(() {
                     availableSong = songTmp;
                   });
-                } else {
-                  setState(() {
-                    availableSong = null;
-                  });
+
+                  if (songTmp == null) {
+                    showSuccessDialog(ctx);
+                  }
                 }
               },
               style: ElevatedButton.styleFrom(
@@ -205,6 +239,62 @@ class _AddSongPageState extends State<AddSongPage> {
           ],
         ),
       ),
+    );
+  }
+
+  void showSuccessDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder:
+          (_) => AlertDialog(
+            actionsPadding: EdgeInsets.only(bottom: 24),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
+            title: Center(
+              child: Column(
+                children: [
+                  Icon(Icons.check_circle, color: Colors.green, size: 48),
+                  SizedBox(height: 8),
+                  Text("Success"),
+                ],
+              ),
+            ),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              spacing: 8,
+              children: [
+                Text(
+                  'Yêu cầu của bạn đã được tiếp nhận! Chúng tôi đang xử lý bài hát của bạn và sẽ thông báo ngay khi có sẵn.',
+                ),
+                Text("Cảm ơn bạn đã giúp mở rộng Music Learn!"),
+              ],
+            ),
+            actions: [
+              Row(
+                spacing: 12,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Text("Add Other Request"),
+                  ),
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.purple,
+                    ),
+                    onPressed: () {
+                      Navigator.pushNamed(context, RouteNames.explore);
+                    },
+                    child: Text('Explore'),
+                  ),
+                ],
+              ),
+            ],
+          ),
     );
   }
 }

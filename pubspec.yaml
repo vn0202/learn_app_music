@@ -69,6 +69,7 @@ flutter:
     - assets/images/banner/
     - assets/images/flags/
     - assets/images/genres/
+    - assets/images/social_icons/
 
 
   # The following line ensures that the Material Icons font is
