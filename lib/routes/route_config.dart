@@ -8,6 +8,7 @@ import 'package:music_app/pages/genre/genre.dart';
 import 'package:music_app/pages/home/home.dart';
 import 'package:music_app/pages/song/song_detail_page.dart';
 import 'package:music_app/pages/users/profile.dart';
+import 'package:music_app/pages/users/profile_settings.dart';
 import 'package:music_app/routes/route_names.dart';
 
 class RouteConfig {
@@ -36,6 +37,9 @@ class RouteConfig {
         return MaterialPageRoute(builder: (_) => SignInPage());
       case RouteNames.profile:
         return MaterialPageRoute(builder: (_) => Profile());
+
+      case RouteNames.profileSettings:
+        return MaterialPageRoute(builder: (_) => ProfileSettings());
 
       default:
         return MaterialPageRoute(builder: (_) => const HomePage());

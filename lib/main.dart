@@ -40,7 +40,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Music Learn',
-      initialRoute: RouteNames.profile,
+      initialRoute: RouteNames.profileSettings,
       onGenerateRoute: RouteConfig.generateRoute,
       theme: lightTheme,
       themeMode: ThemeMode.system,
